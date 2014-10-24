@@ -1,0 +1,34 @@
+%h1 #{@user}
+/   %img{:src => "#{@auth_img}", :alt => "[User image]",:style => "float:left;width:25%;height:25%"}/
+%h2 My Short List
+%h6 (URLs + label)
+%ol
+  - if (@list.length == 0)
+    %p EMPTY LIST
+  - else
+    - @list.each do |url|
+      %li 
+        #{url.url}
+        - if (url.label == '')
+          %a{:href=>"/user/index/#{url.id.to_s(Base)}",:target=>"_blank",:title=>"#{url.url}"} (#{url.id.to_s(Base)})
+        -else
+          %a{:href=>"/user/index/#{url.label}",:target=>"_blank",:title=>"#{url.url}"} (#{url.label})
+Shorten this:
+%form{:name=> "input" , :action=>"/user/index",:method=>"POST"}
+  %label{:for=>"url"}
+  %input{:type=>"text",:name=>"url",:id=>"myurl",:autofocus => "",:size=>"50"}
+  %input{:type=>"submit",:value=>"Make it"}
+  %br
+  to &#47;
+  %label{:for=>"label"}
+  %input{:type=>"text",:name=>"label",:id=>"mylabel",:autofocus=>"",:size=>"15"}
+  (opcional)
+%br
+%a{:href=>"/user/index/logout",:title=>"logout"} Logout
+%br
+%br
+%a{:href=>"/user/index/close_sesion",:title=>"Close sesion"} Close Google Sesion
+/ %form{:name=>"input", :action=>"/user/index/logout",:method=>"get"}
+/   %input{:type=>"button",:value=>"Logout"}
+
+
