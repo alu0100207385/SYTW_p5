@@ -3,5 +3,25 @@
   %head
     %meta{"http-equiv" => "Content-Type", :content => "text/html, charset=utf-8"}
     %title PRACTICA 5: Estadisticas urls
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1", :name => "viewport"}/
+    %link{:href => "/css/bootstrap.min.css", :rel => "stylesheet"}/
+    /[if lt IE 9]
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    %link{:href => "/css/styles.css", :rel => "stylesheet"}/
   %body
     =yield
+    %footer
+      .container
+        .row
+          .col-md-6.col-md-offset-3.text-center
+            %hr
+            %p
+              Design by
+              %i.icon-heart-empty
+                = succeed "." do
+                  %a{:href => "https://github.com/alu0100537451",:target=>"_blank"} Aarón Vera Cerdeña
+                  &
+                  %a{:href => "http://alu0100207385.github.io",:target=>"_blank"} Aarón Socas Gaspar
+                  %br Copyright ©2014
+    %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"}
+    %script{:src => "../js/bootstrap.min.js"}
