@@ -15,29 +15,27 @@ end
 
 describe "Test APP Estadisticas Urls Cortas" do
    
-   before :all do
+   before :each do
 	  @browser = Selenium::WebDriver.for :firefox
 	  @site = 'http://sytw5.herokuapp.com/'
+	  @browser.get(@site)
    end
    
    it "I can see signin page" do
 #  	  @browser.get('localhost:9292')
-	  @browser.get(@site)
 	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
-# 	  begin
-# 		 element = wait.until { @browser.find_element(:id,"enter") }
-#  	  ensure
-	  element = @browser.find_element(:id,"enter")
+	  begin
+		 element = wait.until { @browser.find_element(:id,"enter") }
+ 	  ensure
 		 element = element.text.to_s
-		 puts "element = #{element}"
+# 		 puts "element = #{element}"
 		 assert_equal(true, element.include?("SIGN IN WITH GOOGLE"))
 		 @browser.quit
-# 	  end
+	  end
    end
-=begin
+
    it "I can access google login page" do
- 	  @browser.get('localhost:9292')
-# 	  @browser.get(@site)
+#  	  @browser.get('localhost:9292')
 	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
 	  begin
 		 element = wait.until { @browser.find_element(:id,"enter") }
@@ -51,6 +49,6 @@ describe "Test APP Estadisticas Urls Cortas" do
 		 @browser.quit
 	  end
    end
-=end
+
 
 end
