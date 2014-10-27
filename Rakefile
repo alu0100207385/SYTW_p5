@@ -1,6 +1,6 @@
 task :default => :tests
 
-desc "Run the server via Sinatra (default)"
+desc "Run the server via Sinatra"
 task :sinatra do
   sh "ruby app.rb"
 end
@@ -22,10 +22,10 @@ task :heroku do
   sh "heroku open"
 end
 
-desc "Run tests"
+desc "Run tests (default)"
 task :tests do
-  sh "gnome-terminal -x sh -c 'rackup' && sh -c 'ruby test/test.rb'"
-#    sh "ruby test/test.rb"
+#    sh "gnome-terminal -x sh -c 'rackup' && sh -c 'ruby test/test.rb'"
+     sh "ruby test/test.rb"
 end
 
 desc "Open repository"
