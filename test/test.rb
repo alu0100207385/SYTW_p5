@@ -13,11 +13,14 @@ def app
    Sinatra::Application
 end
 
-describe "Test APP Estadisticas Urls Cortas" do
+describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces y acceso" do
    
    before :each do
 	  @browser = Selenium::WebDriver.for :firefox
 	  @site = 'http://sytw5.herokuapp.com/'
+	  if (ARGV[0].to_s == "local")
+		 @site = 'localhost:9292/'
+	  end
 	  @browser.get(@site)
    end
 
@@ -33,18 +36,19 @@ describe "Test APP Estadisticas Urls Cortas" do
 		 @browser.quit
 	  end
    end
-   
+
    it "The designers' links go right: Aaron Vera Cerdeña" do
-	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
-	  begin
-		 element = wait.until { @browser.find_element(:id,"aa1") }
- 	  ensure
-		 element.click
-		 @browser.manage.timeouts.implicit_wait = 5
-		 element = wait.until { @browser.find_element(:class,"vcard-username") }
-		 element = element.text.to_s
-		 assert_equal(element, "alu0100537451")
-		 @browser.quit
+	  @browser.manage.timeouts.implicit_wait = 5
+	  @browser.find_element(:id,"aa1").click
+	  assert_equal("https://github.com/alu0100537451",@browser.current_url)
+	  @browser.quit
+   end
+   
+   it "The designers' links go right: Aaron Socas Gaspar" do
+	  @browser.manage.timeouts.implicit_wait = 5
+	  @browser.find_element(:id,"aa2").click
+	  assert_equal("http://alu0100207385.github.io/",@browser.current_url)
+	  @browser.quit
    end
 
    it "I can access google login page" do
