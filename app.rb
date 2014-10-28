@@ -50,12 +50,10 @@ end
 
 
 get '/auth/:name/callback' do
-   puts "LLEGO AKI 11111"
     config = YAML.load_file 'config/config.yml'
     case params[:name]
     when 'google_oauth2'
 	  @auth = request.env['omniauth.auth']
-#       session[:auth] = @auth
       session[:name] = @auth['info'].name
 	  session[:email] = @auth['info'].email
 # 	  session[:image] = @auth['info'].image
@@ -66,7 +64,6 @@ get '/auth/:name/callback' do
 end
 
 get '/user/:webname' do
-   puts "LLEGO AKI 222222"
   if (session[:name] != nil)
     case(params[:webname])
     when "index"
@@ -84,7 +81,6 @@ end
 
 
 post '/user/:webname' do
-   puts "LLEGO AKI 3333"
 #   puts "inside post '/': #{params}"
   if (session[:name] != nil)
     uri = URI::parse(params[:url])

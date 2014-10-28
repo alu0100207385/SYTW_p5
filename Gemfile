@@ -10,7 +10,6 @@ gem 'erubis'
 gem 'haml'
 gem 'data_mapper'
 gem 'thin'
-gem 'rake'
 
 group :production do
    gem 'do_postgres'
@@ -18,7 +17,12 @@ group :production do
    gem 'dm-postgres-adapter'
 end
 
-group :development do
-  gem 'sqlite3'
-  gem 'dm-sqlite-adapter'
+group :test, :development do
+   gem 'sqlite3'
+   gem 'dm-sqlite-adapter'
+   gem 'rack-test'
+   gem 'rake'
+   gem 'minitest'
+   gem 'test-unit'
+   gem 'selenium-webdriver','2.43.0'
 end

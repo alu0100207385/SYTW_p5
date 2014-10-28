@@ -23,13 +23,17 @@ Con el comando `$ rake -T` podemos ver las opciones posibles.
 Las opciones posibles son:
 
 ```
-1. rake (default) # Ejecutar la aplicación desde consola
+1. rake (default) # Ejecutar la aplicación via Sinatra
 
-2. rake heroku    # Abrir la App en Heroku 
+2. rake rackup    # Ejecutar la aplicación via rackup
 
-3. rake update    # Actualiza la app en Heroku
+3. rake heroku    # Abrir la App en Heroku 
 
-4. rake repo      # Acceder al repositorio
+4. rake update    # Actualiza la app en Heroku
+
+5. rake repo      # Acceder al repositorio
+
+6. rake tests     # Realizar los tests
 ```
 
 
@@ -40,6 +44,8 @@ Las opciones posibles son:
 * [Sinatra](http://www.sinatrarb.com/)
 * [Deploying Rack-based Apps in Heroku](https://devcenter.heroku.com/articles/rack)
 * [Intridea Omniauth](https://github.com/intridea/omniauth)
+* [Selenium](http://www.seleniumhq.org/)
+* [Travis](https://travis-ci.org/)
 
 -------------------------
 *Aarón Socas Gaspar && Aarón José Vera Cerdeña- Sistemas y Tecnologías Web (Curso 2014-2015)*
