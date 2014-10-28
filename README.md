@@ -23,17 +23,14 @@ Con el comando `$ rake -T` podemos ver las opciones posibles.
 Las opciones posibles son:
 
 ```
-1. rake (default) # Ejecutar la aplicación via Sinatra
+1. rake heroku       # Open app in Heroku
+2. rake local_tests  # Run tests in local machine
+3. rake rackup       # Run the server via rackup
+4. rake repo         # Open repository
+5. rake sinatra      # Run the server via Sinatra
+6. rake tests        # Run tests (default)
+7. rake update       # Update app in Heroku
 
-2. rake rackup    # Ejecutar la aplicación via rackup
-
-3. rake heroku    # Abrir la App en Heroku 
-
-4. rake update    # Actualiza la app en Heroku
-
-5. rake repo      # Acceder al repositorio
-
-6. rake tests     # Realizar los tests
 ```
 
 

@@ -12,6 +12,7 @@ end
 
 desc "Update app in Heroku"
 task :update do
+  sh "git checkout master"
   sh "git commit -a -m 'update config heroku'"
   sh "git push origin master"
   sh "git push heroku master"
@@ -24,8 +25,12 @@ end
 
 desc "Run tests (default)"
 task :tests do
-#     sh "gnome-terminal -x sh -c 'rackup' && sh -c 'ruby test/test.rb'"
-      sh "ruby test/test.rb"
+   sh "ruby test/test.rb"
+end
+
+desc "Run tests in local machine"
+task :local_tests do
+   sh "gnome-terminal -x sh -c 'rackup' && sh -c 'ruby test/test.rb local'"
 end
 
 desc "Open repository"
