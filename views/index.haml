@@ -30,10 +30,16 @@
     (opcional)
 %br
 %div{:style=>"text-align:right"}
+<<<<<<< HEAD
   %a.btn.btn-primary{:href=>"/user/index/logout",:title=>"logout"} Logout
   /%a{:href=>"/user/index/logout",:title=>"logout"} Logout
   %br
   %br
   %a.btn.btn-primary{:href=>"/user/index/close_sesion",:title=>"Close sesion"} Close Google Sesion
+=======
+  %a{:href=>"/user/index/logout",:title=>"logout",:id=>"out"} Logout
+  %br
+  %a{:href=>"/user/index/close_sesion",:title=>"Close sesion",:id=>"close"} Close Google Session
+>>>>>>> testing
 / %form{:name=>"input", :action=>"/user/index/logout",:method=>"get"}
 /   %input{:type=>"button",:value=>"Logout"}

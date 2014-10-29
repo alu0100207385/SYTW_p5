@@ -13,22 +13,21 @@ def app
    Sinatra::Application
 end
 
-describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces y acceso" do
+describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces" do
    
    before :each do
 	  @browser = Selenium::WebDriver.for :firefox
-	  @site = 'https://sytw5.herokuapp.com/'
+	  @site = 'http://sytw5.herokuapp.com/'
 	  if (ARGV[0].to_s == "local")
 		 @site = 'localhost:9292/'
 	  end
 	  @browser.get(@site)
+	  @wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
    end
 
    it "I can see signin page" do
-#  	  @browser.get('localhost:9292')
-	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
 	  begin
-		 element = wait.until { @browser.find_element(:id,"enter") }
+		 element = @wait.until { @browser.find_element(:id,"enter") }
  	  ensure
 		 element = element.text.to_s
 # 		 puts "element = #{element}"
@@ -52,13 +51,12 @@ describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces y acceso" d
    end
 
    it "I can access google login page" do
-	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
 	  begin
-		 element = wait.until { @browser.find_element(:id,"enter") }
+		 element = @wait.until { @browser.find_element(:id,"enter") }
 	  ensure
 		 element.click
 		 @browser.manage.timeouts.implicit_wait = 5
-		 element = wait.until { @browser.find_element(:id,"link-signup") }
+		 element = @wait.until { @browser.find_element(:id,"link-signup") }
 		 element = element.text.to_s
 		 if (element.include?("Create an account") == true) or (element.include?("Crear una cuenta") == true) #controlamos que nos redirija a la version inglesa
 			control = true
@@ -71,9 +69,8 @@ describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces y acceso" d
 
    it "If User did not log in, it  will be redirected to signin page" do
 	  @browser.get(@site+'user/index')
-	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
 	  begin
-		 element = wait.until { @browser.find_element(:id,"enter") }
+		 element = @wait.until { @browser.find_element(:id,"enter") }
 	  ensure
 		 element = element.text.to_s
 		 assert_equal(true, element.include?("SIGN IN WITH GOOGLE")) #No se ha podido acceder pq no esta logueado, volvemos a /sigin
@@ -81,28 +78,71 @@ describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces y acceso" d
 	  end
    end
 
-   it "I can access user/index" do
-	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
+end
+
+
+# ***************************************************************************
+describe "Test APP Estadisticas Urls Cortas: Entrada-salida del sistema" do
+   
+   before :all do
+	  @browser = Selenium::WebDriver.for :firefox
+	  @site = 'http://sytw5.herokuapp.com/'
+	  if (ARGV[0].to_s == "local")
+		 @site = 'localhost:9292/'
+	  end
+	  @browser.get(@site)
+	  @wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
 	  begin
-		 element = wait.until { @browser.find_element(:id,"enter") }
+		 element = @wait.until { @browser.find_element(:id,"enter") }
 	  ensure
 		 element.click
 		 @browser.manage.timeouts.implicit_wait = 5
 		 @browser.find_element(:id,"Email").send_keys("usu0100")
 		 @browser.find_element(:id,"Passwd").send_keys("sytw20142015")
 		 @browser.find_element(:id,"signIn").click
-		 @browser.manage.timeouts.implicit_wait = 6
-		 @browser.find_element(:id,"submit_approve_access").send_keys:return
-# 		 @browser.find_element(:id,"submit_approve_access").click
-		begin
-		   element = wait.until { @browser.find_element(:id,"usu") }
-		ensure
-		   element = element.text.to_s
-		   assert_equal(true, element.include?("USU DE PRUEBA"))
-		   @browser.quit
-		end
+		 if (ARGV[0].to_s == "local")
+			@browser.manage.timeouts.implicit_wait = 6
+			@browser.find_element(:id,"submit_approve_access").send_keys:return
+		 end
 	  end
    end
+   
+   after :all do
+	  @browser.quit
+   end
 
+   it "I can access user/index" do
+	 begin
+		element = @wait.until { @browser.find_element(:id,"usu") }
+	 ensure
+		element = element.text.to_s
+		assert_equal(true, element.include?("USU DE PRUEBA"))
+	 end
+   end
 
+   it "Button Logout works right" do
+	 begin
+		element = @wait.until { @browser.find_element(:id,"out") }
+	 ensure
+		element.click
+		@browser.manage.timeouts.implicit_wait = 5
+		assert_equal("http://"+@site,@browser.current_url)
+	 end
+   end
+
+   it "Button CloseSession works right" do
+	  begin
+		 element = @wait.until { @browser.find_element(:id,"close") }
+	  ensure
+		 element.click
+		 @browser.manage.timeouts.implicit_wait = 5
+		 puts "actual = #{@browser.current_url}"
+		 assert_equal("https://accounts.google.com/ServiceLogin?elo=1",@browser.current_url)
+	  end
+   end  
 end
+
+
+# ******************************************************************
+# describe "Test APP Estadisticas Urls Cortas: Gestión de BBDD" do
+# end
