@@ -20,11 +20,15 @@ end
 
 desc "Open app in Heroku"
 task :heroku do
-  sh "heroku open"
+#    sh "heroku pg:reset DATABASE_URL --confirm sytw5"
+#    sh "heroku run rake db:migrate"
+   sh "heroku open"
 end
 
 desc "Run tests (default)"
 task :tests do
+#    sh "heroku pg:reset DATABASE_URL --confirm sytw5"
+#    sh "heroku run rake db:migrate"
    sh "ruby test/test.rb"
 end
 
