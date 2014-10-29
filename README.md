@@ -14,7 +14,7 @@ Podemos acceder a la aplicación subida a heroku desde [aqui](http://sytw5.herok
 
 ##Tests
 
-[![Build Status](https://travis-ci.org/alu0100207385/SYTW_p5.svg?branch=testing)
+![Build Status](https://travis-ci.org/alu0100207385/SYTW_p5/builds/39286192)
 
 Podemos probar la aplicación ejecutando los tests. Podemos hacerlo en nuestra maquina local mediante la opción: 
 `rake local_tests` o bien accediendo a los resultados en [travis](https://travis-ci.org/alu0100207385/SYTW_p5/builds/39286192).
@@ -52,6 +52,7 @@ Las opciones posibles son:
 * [Selenium](http://www.seleniumhq.org/)
 * [Travis](https://travis-ci.org/)
 * [Ejemplo practico Selenium](http://aspyct.org/blog/2012/09/09/functional-web-testing-with-selenium-and-ruby/)
+* [Google EN](http://www.google.com/webhp?hl=en)
 
 -------------------------
 *Aarón Socas Gaspar && Aarón José Vera Cerdeña- Sistemas y Tecnologías Web (Curso 2014-2015)*

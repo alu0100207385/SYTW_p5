@@ -7,7 +7,7 @@ before_install:
    - sudo apt-get install -qq postgresql
    - sudo apt-get install -qq postgresql-server-dev-9.3
    - sudo apt-get install -qq libpq-dev
-   - sudo apt-get install gnome-terminal
+   #- sudo apt-get install gnome-terminal
 branches:
   only:
     - testing
