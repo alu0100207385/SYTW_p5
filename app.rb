@@ -136,3 +136,4 @@ get '/auth/failure' do
 end
 
 error do haml :signin end
+
