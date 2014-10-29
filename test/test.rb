@@ -126,7 +126,10 @@ describe "Test APP Estadisticas Urls Cortas: Entrada-salida del sistema" do
 	 ensure
 		element.click
 		@browser.manage.timeouts.implicit_wait = 5
-		assert_equal("http://"+@site,@browser.current_url)
+		 if (ARGV[0].to_s == "local")
+			@site = "http://"+@site
+		 end
+		assert_equal(@site,@browser.current_url)
 	 end
    end
 
@@ -136,13 +139,44 @@ describe "Test APP Estadisticas Urls Cortas: Entrada-salida del sistema" do
 	  ensure
 		 element.click
 		 @browser.manage.timeouts.implicit_wait = 5
-		 puts "actual = #{@browser.current_url}"
 		 assert_equal("https://accounts.google.com/ServiceLogin?elo=1",@browser.current_url)
 	  end
    end  
 end
 
-
+=begin
 # ******************************************************************
-# describe "Test APP Estadisticas Urls Cortas: Gestión de BBDD" do
-# end
+describe "Test APP Estadisticas Urls Cortas: Gestión de BBDD" do
+
+   before :all do
+	  @browser = Selenium::WebDriver.for :firefox
+	  @site = 'http://sytw5.herokuapp.com/'
+	  if (ARGV[0].to_s == "local")
+		 @site = 'localhost:9292/'
+	  end
+	  @browser.get(@site)
+	  @wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
+	  begin
+		 element = @wait.until { @browser.find_element(:id,"enter") }
+	  ensure
+		 element.click
+		 @browser.manage.timeouts.implicit_wait = 5
+		 @browser.find_element(:id,"Email").send_keys("usu0100")
+		 @browser.find_element(:id,"Passwd").send_keys("sytw20142015")
+		 @browser.find_element(:id,"signIn").click
+		 if (ARGV[0].to_s == "local")
+			@browser.manage.timeouts.implicit_wait = 6
+			@browser.find_element(:id,"submit_approve_access").send_keys:return
+		 end
+	  end
+   end
+   
+   after :all do
+	  @browser.quit
+   end
+   
+   it "Create a new shorted url" do
+	  @browser.find_element(:id,"myurl").send_keys("usu0100")
+   end
+end
+=end

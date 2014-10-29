@@ -22,7 +22,7 @@
   %form{:name=> "input" , :action=>"/user/index",:method=>"POST"}
     %label{:for=>"url"}
     %input{:type=>"text",:name=>"url",:id=>"myurl",:autofocus => "",:size=>"50"}
-    %input{:type=>"submit",:value=>"Make it"}
+    %input{:type=>"submit",:value=>"Make it",:id=>"makeit"}
     %br
     to &#47;
     %label{:for=>"label"}
@@ -30,8 +30,7 @@
     (opcional)
 %br
 %div{:style=>"text-align:right"}
-  %a{:href=>"/user/index/logout",:title=>"logout",:id=>"out"} Logout
+  %a.btn.btn-primary{:href=>"/user/index/logout",:title=>"logout",:id=>"out"} Logout
   %br
-  %a{:href=>"/user/index/close_sesion",:title=>"Close sesion",:id=>"close"} Close Google Session
-/ %form{:name=>"input", :action=>"/user/index/logout",:method=>"get"}
-/   %input{:type=>"button",:value=>"Logout"}
+  %br
+  %a.btn.btn-primary{:href=>"/user/index/close_sesion",:title=>"Close sesion",:id=>"close"} Close Google Session
