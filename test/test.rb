@@ -83,7 +83,6 @@ describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces y acceso" d
 =end
    it "I can access user/index" do
 	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
-	  @browser.get('http://www.google.com/webhp?hl=en')
 	  begin
 		 element = wait.until { @browser.find_element(:id,"enter") }
 	  ensure
