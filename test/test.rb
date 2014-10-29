@@ -23,7 +23,7 @@ describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces y acceso" d
 	  end
 	  @browser.get(@site)
    end
-=begin
+
    it "I can see signin page" do
 #  	  @browser.get('localhost:9292')
 	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
@@ -80,7 +80,7 @@ describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces y acceso" d
 		 @browser.quit
 	  end
    end
-=end
+
    it "I can access user/index" do
 	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
 	  begin
@@ -91,15 +91,17 @@ describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces y acceso" d
 		 @browser.find_element(:id,"Email").send_keys("usu0100")
 		 @browser.find_element(:id,"Passwd").send_keys("sytw20142015")
 		 @browser.find_element(:id,"signIn").click
-		 @browser.manage.timeouts.implicit_wait = 5
-		 @browser.find_element(:id,"submit_approve_access").click
-		 @browser.manage.timeouts.implicit_wait = 5
-		 element = wait.until { @browser.find_element(:id,"usu") }
-		 element = element.text.to_s
-		 puts "element = #{element}"
-		 assert_equal(true, element.include?("usu de prueba"))
-		 @browser.quit
+		 @browser.manage.timeouts.implicit_wait = 7
+		 @browser.find_element(:id,"submit_approve_access").send_keys:return
+		begin
+		   element = wait.until { @browser.find_element(:id,"usu") }
+		ensure
+		   element = element.text.to_s
+		   assert_equal(true, element.include?("USU DE PRUEBA"))
+		   @browser.quit
+		end
 	  end
    end
+
 
 end
