@@ -23,7 +23,7 @@ describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces y acceso" d
 	  end
 	  @browser.get(@site)
    end
-=begin
+
    it "I can see signin page" do
 #  	  @browser.get('localhost:9292')
 	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
@@ -80,7 +80,7 @@ describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces y acceso" d
 		 @browser.quit
 	  end
    end
-=end
+
    it "I can access user/index" do
 	  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
 	  begin
