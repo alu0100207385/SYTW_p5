@@ -14,7 +14,7 @@ Podemos acceder a la aplicación subida a heroku desde [aqui](http://sytw5.herok
 
 ##Tests
 
-![Build Status](https://travis-ci.org/alu0100207385/SYTW_p5/builds/39286192)
+[![Build Status](https://travis-ci.org/alu0100207385/SYTW_p5.svg?branch=testing)](https://travis-ci.org/alu0100207385/SYTW_p5)
 
 Podemos probar la aplicación ejecutando los tests. Podemos hacerlo en nuestra maquina local mediante la opción: 
 `rake local_tests` o bien accediendo a los resultados en [travis](https://travis-ci.org/alu0100207385/SYTW_p5/builds/39286192).
