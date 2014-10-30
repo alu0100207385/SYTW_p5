@@ -146,7 +146,7 @@ end
 
 
 # ******************************************************************
-describe "Test APP Estadisticas Urls Cortas: Gestión de BBDD" do
+describe "Test APP Estadisticas Urls Cortas: Gestión de la BBDD" do
 
    before :all do
 	  @browser = Selenium::WebDriver.for :firefox
@@ -168,26 +168,47 @@ describe "Test APP Estadisticas Urls Cortas: Gestión de BBDD" do
 			@browser.manage.timeouts.implicit_wait = 6
 			@browser.find_element(:id,"submit_approve_access").send_keys:return
 		 end
+		 @browser.manage.timeouts.implicit_wait = 5
 	  end
    end
    
    after :all do
 	  @browser.quit
    end
-   
-   it "View shorted url list" do
-	  @browser.find_element(:id,"myurl").send_keys("usu0100")
+
+   it "Create a new shorted url & check it" do
+	  @browser.find_element(:id,"myurl").send_keys("http://www.ull.es/")
+	  @browser.find_element(:id,"mylabel").send_keys("ull")
+	  @browser.find_element(:id,"makeit").click
+	  begin
+		 element = @wait.until { @browser.find_element(:id,"mylabelgo") }
+	  ensure
+		 element.click
+		 @browser.manage.timeouts.implicit_wait = 5
+		 assert_equal("http://www.ull.es/",@browser.current_url)
+	  end
    end
-   
-   it "Create a new shorted url" do
+
+   it "New shorted url is displayed on the list" do
+	  element = @browser.find_element(:id,"mylinks").find_element(:xpath,'.//*[contains(.,"(ull)")]').text
+	  puts "element = #{element}"
+	  assert_equal("http://www.ull.es/ (ull)\nBorrar",element)
    end
-   
+
    it "Check shorted url link by id" do
+	  @browser.get(@browser.current_url+"/1")
+	  assert_equal("http://www.ull.es/",@browser.current_url)
    end
    
    it "Check shorted url link by label" do
+	  @browser.get(@browser.current_url+"/ull")
+	  assert_equal("http://www.ull.es/",@browser.current_url)
    end
-   
+
+=begin
    it "Delete a shorted url" do
    end
+   it "Delete all short url list" do
+   end
+=end
 end

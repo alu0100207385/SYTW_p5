@@ -141,8 +141,7 @@ end
 
 
 get '/user/index/:shortened' do
-   puts "ENTRO EN :shortened"
-   puts "inside get '/user/index/:shortened': #{params}"
+#    puts "inside get '/user/index/:shortened': #{params}"
    short_url = nil
    short_url = ShortenedUrl.first(:label => params[:shortened])
    if short_url == nil
