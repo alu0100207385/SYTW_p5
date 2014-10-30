@@ -119,8 +119,10 @@ end
 delete '/user/index/del/:url' do
 #    puts "#{params[:url]}"
    if (params[:url] == 'all')
-	  @short_url = ShortenedUrl.all(:order => [:id.asc], :email => session[:email] , :limit => 20)
-	  @short_url.all.destroy
+	  @short_url = ShortenedUrl.all(:order => [:id.asc], :email => session[:email])
+	  if (@short_url.length != 0)
+		 @short_url.all.destroy
+	  end
    else
 	  aux = ShortenedUrl.all(:order => [:id.asc], :email => session[:email])
 	  if (aux.length != 0) then
