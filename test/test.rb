@@ -144,7 +144,7 @@ describe "Test APP Estadisticas Urls Cortas: Entrada-salida del sistema" do
    end  
 end
 
-=begin
+
 # ******************************************************************
 describe "Test APP Estadisticas Urls Cortas: Gestión de BBDD" do
 
@@ -175,8 +175,19 @@ describe "Test APP Estadisticas Urls Cortas: Gestión de BBDD" do
 	  @browser.quit
    end
    
-   it "Create a new shorted url" do
+   it "View shorted url list" do
 	  @browser.find_element(:id,"myurl").send_keys("usu0100")
    end
+   
+   it "Create a new shorted url" do
+   end
+   
+   it "Check shorted url link by id" do
+   end
+   
+   it "Check shorted url link by label" do
+   end
+   
+   it "Delete a shorted url" do
+   end
 end
-=end

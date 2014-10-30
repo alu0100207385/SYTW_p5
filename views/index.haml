@@ -17,12 +17,18 @@
                 %a{:href=>"/user/index/#{url.id.to_s(Base)}",:target=>"_blank",:title=>"#{url.url}"} (#{url.id.to_s(Base)})
               - else
                 %a{:href=>"/user/index/#{url.label}",:target=>"_blank",:title=>"#{url.url}"} (#{url.label})
+              %form{:name=>"delete",:action=>"/user/index/del/#{url.id.to_s(Base)}",:method=>"post"}
+                %button{:type => "submit",:name=>"_method" , :value=>"delete"}Borrar
+        %br
+        %div{:style=>"margin-bottom:-13%"}
+          %form{:name=>"deleteall",:action=>"/user/index/del/all",:method=>"post"}
+            %button{:type => "submit",:name=>"_method" , :value=>"delete"}Borrar Todo
 %div{:style=>"text-align:center"}
   Shorten this:
   %form{:name=> "input" , :action=>"/user/index",:method=>"POST"}
     %label{:for=>"url"}
     %input{:type=>"text",:name=>"url",:id=>"myurl",:autofocus => "",:size=>"50"}
-    %input{:type=>"submit",:value=>"Make it",:id=>"makeit"}
+    %input.btn.btn-default{:type=>"submit",:value=>"Make it",:id=>"makeit"}
     %br
     to &#47;
     %label{:for=>"label"}
