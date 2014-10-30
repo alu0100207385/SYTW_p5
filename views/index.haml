@@ -6,7 +6,7 @@
       URLs (label)
       %br
       %br
-      %ol
+      %ol{:id=>"mylinks"}
         - if (@list.length == 0)
           %p EMPTY LIST
         - else
@@ -14,9 +14,15 @@
             %li
               #{url.url}
               - if (url.label == '')
-                %a{:href=>"/user/index/#{url.id.to_s(Base)}",:target=>"_blank",:title=>"#{url.url}"} (#{url.id.to_s(Base)})
+                %a{:href=>"/user/index/#{url.id.to_s(Base)}",:title=>"#{url.url}",:id=>"myidgo"} (#{url.id.to_s(Base)})
               - else
-                %a{:href=>"/user/index/#{url.label}",:target=>"_blank",:title=>"#{url.url}"} (#{url.label})
+                %a{:href=>"/user/index/#{url.label}",:title=>"#{url.url}",:id=>"mylabelgo"} (#{url.label})
+              %form{:name=>"delete",:action=>"/user/index/del/#{url.id.to_s(Base)}",:method=>"post"}
+                %button{:type => "submit",:name=>"_method", :value=>"delete", :id=>"delete"}Borrar
+        %br
+        %div{:style=>"margin-bottom:-13%"}
+          %form{:name=>"deleteall",:action=>"/user/index/del/all",:method=>"post"}
+            %button{:type => "submit",:name=>"_method", :value=>"delete", :id=>"deleteall"}Borrar Todo
 %div{:style=>"text-align:center"}
   Shorten this:
   %form{:name=> "input" , :action=>"/user/index",:method=>"POST"}

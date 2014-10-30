@@ -70,7 +70,6 @@ get '/user/:webname' do
       @user = session[:name]
 # 	  @user_img = session[:image]
 	  email = session[:email]
-#       @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
 	  @list = ShortenedUrl.all(:order => [:id.asc], :email => email , :limit => 20)
       haml :index
     end
@@ -86,7 +85,6 @@ post '/user/:webname' do
     uri = URI::parse(params[:url])
     if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
       begin
-# 		 @short_url = ShortenedUrl.first_or_create(:url => params[:url],:label => params[:label])
 		 @short_url = ShortenedUrl.first_or_create(:url => params[:url] , :email => session[:email] , :label => params[:label])
 		 rescue Exception => e
 		 puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
@@ -118,14 +116,38 @@ get '/user/index/close_sesion' do
 end
 
 
+delete '/user/index/del/:url' do
+#    puts "#{params[:url]}"
+   if (params[:url] == 'all')
+	  @short_url = ShortenedUrl.all(:order => [:id.asc], :email => session[:email])
+	  if (@short_url.length != 0)
+		 @short_url.all.destroy
+	  end
+   else
+	  aux = ShortenedUrl.all(:order => [:id.asc], :email => session[:email])
+	  if (aux.length != 0) then
+		 begin
+			aux = ShortenedUrl.first(:email => session[:email], :id => params[:url])
+			aux.destroy if !aux.nil?
+			rescue Exception => e
+			puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
+			pp @short_url
+			puts e.message
+		 end
+	  end
+   end
+   redirect '/user/index'
+end
+
+
 get '/user/index/:shortened' do
-  puts "inside get '/user/index/:shortened': #{params}"
-  short_url = nil
-  short_url = ShortenedUrl.first(:label => params[:shortened])
-  if short_url == nil
-	 short_url = ShortenedUrl.first(:id => params[:shortened].to_i(Base))
-  end
-  redirect short_url.url, 301
+#    puts "inside get '/user/index/:shortened': #{params}"
+   short_url = nil
+   short_url = ShortenedUrl.first(:label => params[:shortened])
+   if short_url == nil
+	  short_url = ShortenedUrl.first(:id => params[:shortened].to_i(Base))
+   end
+   redirect short_url.url, 301
 end
 
 
@@ -136,4 +158,3 @@ get '/auth/failure' do
 end
 
 error do haml :signin end
-
