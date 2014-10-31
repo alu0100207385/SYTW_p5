@@ -25,14 +25,14 @@ use OmniAuth::Builder do
 end
 
 # Creamos la bd
-configure :development do
+configure :development, :test do
    DataMapper.setup( :default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/my_shortened_urls.db" )
 end
-=begin
+
 configure :production do
    DataMapper.setup(:default,ENV['HEROKU_POSTGRESQL_RED_URL'])
 end
-=end
+
 DataMapper::Logger.new($stdout, :debug)
 DataMapper::Model.raise_on_save_failure = true 
 
@@ -70,7 +70,7 @@ get '/user/:webname' do
       @user = session[:name]
 # 	  @user_img = session[:image]
 	  email = session[:email]
-	  @list = ShortenedUrl.all(:order => [:id.asc], :email => email , :limit => 20)
+	  @list = ShortenedUrl.all(:order => [:id.asc], :email => email)
       haml :index
     end
   else
