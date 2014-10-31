@@ -25,7 +25,7 @@ use OmniAuth::Builder do
 end
 
 # Creamos la bd
-configure :development do
+configure :development, :test do
    DataMapper.setup( :default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/my_shortened_urls.db" )
 end
 
@@ -70,7 +70,7 @@ get '/user/:webname' do
       @user = session[:name]
 # 	  @user_img = session[:image]
 	  email = session[:email]
-	  @list = ShortenedUrl.all(:order => [:id.asc], :email => email , :limit => 20)
+	  @list = ShortenedUrl.all(:order => [:id.asc], :email => email)
       haml :index
     end
   else
