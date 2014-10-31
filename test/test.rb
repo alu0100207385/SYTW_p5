@@ -14,7 +14,7 @@ def app
 end
 
 describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces" do
-   
+=begin   
    before :each do
 	  @browser = Selenium::WebDriver.for :firefox
 	  @site = 'http://sytw5.herokuapp.com/'
@@ -143,7 +143,7 @@ describe "Test APP Estadisticas Urls Cortas: Entrada-salida del sistema" do
 	  end
    end  
 end
-
+=end
 
 # ******************************************************************
 describe "Test APP Estadisticas Urls Cortas: Gestión de la BBDD" do
@@ -175,7 +175,7 @@ describe "Test APP Estadisticas Urls Cortas: Gestión de la BBDD" do
    after :all do
 	  @browser.quit
    end
-
+=begin
    it "Create a new shorted url & check it" do
 	  @browser.find_element(:id,"myurl").send_keys("http://www.ull.es/")
 	  @browser.find_element(:id,"mylabel").send_keys("ull")
@@ -194,12 +194,20 @@ describe "Test APP Estadisticas Urls Cortas: Gestión de la BBDD" do
 	  puts "element = #{element}"
 	  assert_equal("http://www.ull.es/ (ull)\nBorrar",element)
    end
-
+=end
    it "Check shorted url link by id" do
-	  @browser.get(@browser.current_url+"/1")
+	  aux = -1
+	  @list.each do |url|
+		 puts "--> #{url.email} & #{url.label}"
+		 if (url.email=="usu0100@gmail.com") and (url.label=="ull")
+			aux = url.id.to_s(Base)
+		 end
+	  end
+	  puts "**** : #{aux}"
+	  @browser.get(@browser.current_url+"#{aux}")
 	  assert_equal("http://www.ull.es/",@browser.current_url)
    end
-   
+
    it "Check shorted url link by label" do
 	  @browser.get(@browser.current_url+"/ull")
 	  assert_equal("http://www.ull.es/",@browser.current_url)
@@ -207,6 +215,8 @@ describe "Test APP Estadisticas Urls Cortas: Gestión de la BBDD" do
 
 =begin
    it "Delete a shorted url" do
+	  element = @browser.find_element(:id,"mylinks").find_element(:xpath,'.//*[contains(.,"(ull)")]').text
+	  assert_not_equal("http://www.ull.es/ (ull)\nBorrar",element)
    end
    it "Delete all short url list" do
    end
