@@ -53,9 +53,9 @@ get '/auth/:name/callback' do
     config = YAML.load_file 'config/config.yml'
     case params[:name]
     when 'google_oauth2'
-	  @auth = request.env['omniauth.auth']
+	    @auth = request.env['omniauth.auth']
       session[:name] = @auth['info'].name
-	  session[:email] = @auth['info'].email
+	    session[:email] = @auth['info'].email
 # 	  session[:image] = @auth['info'].image
       redirect "user/index"
     else
@@ -69,9 +69,9 @@ get '/user/:webname' do
     when "index"
       @user = session[:name]
 # 	  @user_img = session[:image]
-	  email = session[:email]
-#       @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
-	  @list = ShortenedUrl.all(:order => [:id.asc], :email => email , :limit => 20)
+	    email = session[:email]
+#      @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
+	    @list = ShortenedUrl.all(:order => [:id.asc], :email => email , :limit => 20)
       haml :index
     end
   else
@@ -133,6 +133,10 @@ get '/auth/failure' do
   flash[:notice] =
     %Q{<h3>Se ha producido un error en la autenticacion</h3> &#60; <a href="/">Volver</a> }
 #  redirect '/'
+end
+
+get '/help' do
+    haml :help
 end
 
 error do haml :signin end
