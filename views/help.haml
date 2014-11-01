@@ -6,46 +6,31 @@
           %button.btn.btn-primary.btn-xs{"data-toggle" => "offcanvas", :type => "button"} Toggle nav
       .jumbotron
         %h1 Problemas frecuentes
-        %p This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport sizes to see it in action.
+        %p Aquí se expone los problemas más habituales en la utilización de los servicios de Google,la plataforma de Heroku y problemas de ejecución.
       .row
         .col-6.col-sm-6.col-lg-4
-          %h2 Problema inicio sesión http
-          %p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+          %h2 Problema inicio sesión
+          %p El inicio de sesión en google puede dar un error al realizar la autentificación con la API de Google,
+          ya que según como te lo tenga definido el desarrollador en la ----------,pues puede ser http://localhost:9292 o https://localhost:9292.
           %p
-            %a.btn.btn-default{:href => "#", :role => "button"} View details &raquo;
+            %a.btn.btn-default{:href => "#", :role => "button"} Ver detalles &raquo;
         / /span
         .col-6.col-sm-6.col-lg-4
           %h2 Problema Ejecución
-          %p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+          %p Suele dar problemas de ejecución debido a que siempre que hagamos alguna modificación debemos realizar un bundle update o en su caso un bundle install,debido a que las gemas que incorporemos deben instalarse para poder utilizarlas en la APP.
           %p
-            %a.btn.btn-default{:href => "#", :role => "button"} View details &raquo;
+            %a.btn.btn-default{:href => "#", :role => "button"} Ver detalles &raquo;
         / /span
         .col-6.col-sm-6.col-lg-4
-          %h2 Id_google
-          %p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+          %h2 Id Google con Heroku
+          %p Se debe definir la dirección de la App de Heroku en el Console de Google,para que se pueda tener acceso correctamente y se pueda autentificar sin problemas.
+
           %p
-            %a.btn.btn-default{:href => "#", :role => "button"} View details &raquo;
+            %a.btn.btn-default{:href => "#", :role => "button"} Ver detalles &raquo;
         / /span
-        .col-6.col-sm-6.col-lg-4
-          %h2 Heading
-          %p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-          %p
-            %a.btn.btn-default{:href => "#", :role => "button"} View details &raquo;
         / /spa
         / /span
       / /row
     / /span
-    #sidebar.col-xs-6.col-sm-3.sidebar-offcanvas{:role => "navigation"}
-      .list-group
-        %a.list-group-item.active{:href => "#"} Link
-        %a.list-group-item{:href => "#"} Link
-        %a.list-group-item{:href => "#"} Link
-        %a.list-group-item{:href => "#"} Link
-        %a.list-group-item{:href => "#"} Link
-        %a.list-group-item{:href => "#"} Link
-        %a.list-group-item{:href => "#"} Link
-        %a.list-group-item{:href => "#"} Link
-        %a.list-group-item{:href => "#"} Link
-        %a.list-group-item{:href => "#"} Link
     / /span
   / /row
