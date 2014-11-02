@@ -10,6 +10,9 @@ gem 'erubis'
 gem 'haml'
 gem 'data_mapper'
 gem 'thin'
+gem 'rest-client'
+gem 'xml-simple'
+gem 'chartkick'
 
 group :production do
    gem 'do_postgres'

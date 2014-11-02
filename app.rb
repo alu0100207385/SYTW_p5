@@ -12,6 +12,7 @@ require 'uri'
 require 'data_mapper'
 require 'erubis'
 require 'pp'
+require 'chartkick'
 
 # set :erb, :escape_html => true
 set :environment, :development
@@ -45,7 +46,16 @@ enable :sessions
 set :session_secret, '*&(^#234a)'
 
 get '/' do
-    haml :signin
+=begin
+   puts "remote IP = #{request.ip}"
+   puts "request.url = #{request.url}"
+  def set_country
+    xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{request.ip}"
+	XmlSimple.xml_in(xml.to_s)
+  end
+  puts "** #{set_country}"
+=end
+   haml :signin
 end
 
 
@@ -100,6 +110,30 @@ post '/user/:webname' do
 end
 
 
+get '/user/index/:url' do
+   case(params[:url])
+   when "logout"
+	  puts "SALIENDO...."
+	  if session[:auth]
+		 session[:auth] = nil;
+	  end
+	  session.clear
+	  redirect '/'
+   when "close_sesion"
+	  session.clear
+	  redirect 'https://accounts.google.com/Logout'
+   when "statistics"
+	  haml :statistics
+   else
+	  short_url = nil
+	  short_url = ShortenedUrl.first(:label => params[:url])
+	  if short_url == nil
+		 short_url = ShortenedUrl.first(:id => params[:url].to_i(Base))
+	  end
+	  redirect short_url.url, 301
+   end
+end
+=begin
 get '/user/index/logout' do
   puts "SALIENDO...."
   if session[:auth]
@@ -115,10 +149,27 @@ get '/user/index/close_sesion' do
   redirect 'https://accounts.google.com/Logout'
 end
 
+get '/user/index/statistics' do
+   haml :statistics
+end
+
+
+get '/user/index/:shortened' do
+#    puts "inside get '/user/index/:shortened': #{params}"
+   short_url = nil
+   short_url = ShortenedUrl.first(:label => params[:shortened])
+   if short_url == nil
+	  short_url = ShortenedUrl.first(:id => params[:shortened].to_i(Base))
+   end
+   redirect short_url.url, 301
+end
+=end
 
 delete '/user/index/del/:url' do
 #    puts "#{params[:url]}"
-   if (params[:url] == 'all')
+#    if (params[:url] == 'all')
+   case(params[:url])
+   when "all"
 	  @short_url = ShortenedUrl.all(:order => [:id.asc], :email => session[:email])
 	  if (@short_url.length != 0)
 		 @short_url.all.destroy
@@ -139,22 +190,11 @@ delete '/user/index/del/:url' do
    redirect '/user/index'
 end
 
-
-get '/user/index/:shortened' do
-#    puts "inside get '/user/index/:shortened': #{params}"
-   short_url = nil
-   short_url = ShortenedUrl.first(:label => params[:shortened])
-   if short_url == nil
-	  short_url = ShortenedUrl.first(:id => params[:shortened].to_i(Base))
-   end
-   redirect short_url.url, 301
-end
-
-
 get '/auth/failure' do
   flash[:notice] =
     %Q{<h3>Se ha producido un error en la autenticacion</h3> &#60; <a href="/">Volver</a> }
 #  redirect '/'
 end
+
 
 error do haml :signin end
