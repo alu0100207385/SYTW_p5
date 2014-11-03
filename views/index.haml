@@ -17,7 +17,7 @@
       %br
       %ol{:id=>"mylinks"}
         - if (@list.length == 0)
-          %p EMPTY LIST
+          %p{:id=>"empty"} EMPTY LIST
         - else
           - @list.each do |url|
             %li

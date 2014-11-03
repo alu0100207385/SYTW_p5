@@ -14,7 +14,7 @@ def app
 end
 
 describe "Test APP Estadisticas Urls Cortas: Comprobacion de enlaces" do
-   
+
    before :each do
 	  @browser = Selenium::WebDriver.for :firefox
 	  @site = 'http://sytw5.herokuapp.com/'
@@ -173,6 +173,9 @@ describe "Test APP Estadisticas Urls Cortas: Gestión de la BBDD" do
    end
    
    after :all do
+	  @browser.get(@site+'user/index')
+	  @browser.manage.timeouts.implicit_wait = 5
+	  @browser.find_element(:id,"deleteall").click
 	  @browser.quit
    end
 
@@ -190,25 +193,55 @@ describe "Test APP Estadisticas Urls Cortas: Gestión de la BBDD" do
    end
 
    it "New shorted url is displayed on the list" do
-	  element = @browser.find_element(:id,"mylinks").find_element(:xpath,'.//*[contains(.,"(ull)")]').text
-	  puts "element = #{element}"
+	  @browser.find_element(:id,"myurl").send_keys("http://www.ull.es/")
+	  @browser.find_element(:id,"mylabel").send_keys("ull")
+	  @browser.find_element(:id,"makeit").click
+	  @browser.manage.timeouts.implicit_wait = 5
+	  element = @browser.find_element(:id,"mylinks").find_element(:xpath,'.//*[contains(.,"ull")]').text
 	  assert_equal("http://www.ull.es/ (ull)\nBorrar",element)
    end
 
-   it "Check shorted url link by id" do
-	  @browser.get(@browser.current_url+"/1")
+   it "Check shorted url link by label" do
+	  @browser.find_element(:id,"myurl").send_keys("http://www.ull.es/")
+	  @browser.find_element(:id,"mylabel").send_keys("ull")
+	  @browser.find_element(:id,"makeit").click
+	  @browser.manage.timeouts.implicit_wait = 5
+	  @browser.get(@browser.current_url+"/ull")
+	  @browser.manage.timeouts.implicit_wait = 5
 	  assert_equal("http://www.ull.es/",@browser.current_url)
    end
    
-   it "Check shorted url link by label" do
-	  @browser.get(@browser.current_url+"/ull")
-	  assert_equal("http://www.ull.es/",@browser.current_url)
+   it "Check shorted url link by id" do
+	  @browser.find_element(:id,"myurl").send_keys("http://www.ull.es/view/centros/etsii/Inicio/es")
+	  @browser.find_element(:id,"makeit").click #ahora lo creamos sin label para usar el id generado automaticamente
+	  r = @browser.find_element(:id,"mylinks").find_element(:xpath,'.//*[contains(.,"etsii")]').text
+	  a=[]
+	  i = (r.size - (")\nBorrar".size)-1).to_i
+	  while r[i]!="("
+		 a << r[i]
+		 i = i-1
+	  end
+	  r=0
+	  for i in(0..a.size-1)
+		 r = a[i].to_i * (10**i) + r
+	  end
+	  @browser.get(@browser.current_url+"/#{r}")
+	  assert_equal("http://www.ull.es/view/centros/etsii/Inicio/es",@browser.current_url)
    end
 
-=begin
-   it "Delete a shorted url" do
-   end
    it "Delete all short url list" do
+	  @browser.find_element(:id,"deleteall").click
+	  @browser.manage.timeouts.implicit_wait = 5
+	  assert_equal("EMPTY LIST",@browser.find_element(:id,"empty").text)
    end
-=end
+   
+   it "Delete a shorted url" do
+	  @browser.find_element(:id,"myurl").send_keys("https://www.google.com/")
+	  @browser.find_element(:id,"makeit").click
+	  @browser.manage.timeouts.implicit_wait = 5
+	  @browser.find_element(:id,"delete").click
+	  @browser.manage.timeouts.implicit_wait = 5
+	  assert_equal("EMPTY LIST",@browser.find_element(:id,"empty").text)
+   end
+
 end

@@ -25,7 +25,7 @@ use OmniAuth::Builder do
 end
 
 # Creamos la bd
-configure :development do
+configure :development, :test do
    DataMapper.setup( :default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/my_shortened_urls.db" )
 end
 
