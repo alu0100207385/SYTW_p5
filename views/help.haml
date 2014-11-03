@@ -4,28 +4,27 @@
       .col-xs-12.col-sm-9
         %p.pull-right.visible-xs
           %button.btn.btn-primary.btn-xs{"data-toggle" => "offcanvas", :type => "button"} Toggle nav
-      .jumbotron
-        %h1 Problemas frecuentes
+      .jumbotron{:style=>"background-color:#222334"}
+        %h1{:style=>"margin-top:-5%"}Problemas frecuentes
         %p Aquí se expone los problemas más habituales en la utilización de los servicios de Google,la plataforma de Heroku y problemas de ejecución.
       .row
         .col-6.col-sm-6.col-lg-4
           %h2 Problema inicio sesión
-          %p El inicio de sesión en google puede dar un error al realizar la autentificación con la API de Google,ya que según como te lo tenga definido el desarrollador en la ----------,pues puede ser http://localhost:9292 o https://localhost:9292.
-          %p
-            %a.btn.btn-default{:href => "https://github.com/alu0100207385/SYTW_p5/issues/4", :role => "button"} Ver detalles &raquo;
+          %p El inicio de sesión en google puede dar un error al realizar la autentificación con la API de Google,ya que según como te lo tenga definido el desarrollador en la configuración,pues puede ser http://localhost:9292 o https://localhost:9292.
+          %br
+            %a.btn.btn-default{:href => "/user/index", :role => "button"} Volver &raquo;
         / /span
         .col-6.col-sm-6.col-lg-4
           %h2 Problema Ejecución
           %p Suele dar problemas de ejecución debido a que siempre que hagamos alguna modificación debemos realizar un bundle update o en su caso un bundle install,debido a que las gemas que incorporemos deben instalarse para poder utilizarlas en la APP.
-          %p
-            %a.btn.btn-default{:href => "https://github.com/alu0100207385/SYTW_p5/issues/4", :role => "button"} Ver detalles &raquo;
         / /span
         .col-6.col-sm-6.col-lg-4
           %h2 Id Google con Heroku
           %p Se debe definir la dirección de la App de Heroku en el Console de Google,para que se pueda tener acceso correctamente y se pueda autentificar sin problemas.
-
-          %p
-            %a.btn.btn-default{:href => "https://github.com/alu0100207385/SYTW_p5/issues/4", :role => "button"} Ver detalles &raquo;
+          %br
+          %br
+          %br
+            %a.btn.btn-default{:href => "https://github.com/alu0100207385/SYTW_p5/issues/4", :role => "button"} Más ayuda &raquo;
         / /span
         / /spa
         / /span

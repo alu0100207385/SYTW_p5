@@ -1,18 +1,14 @@
 .blurb.bright
   .row
-    %div{:style=>"text-align:left"}
-      .btn-group
-        %button.btn.btn-primary.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
-          Logout
-          %span.caret
-        %ul.dropdown-menu{:role => "menu"}
-          %li
-            %a{:href => "/user/index/close_sesion",:title=>"logout"} Logout
-          %li
-            %a{:href=>"/user/index/close_sesion",:title=>"Close sesion"} Logout Google
-          %li.divider
-          %li
-            %a{:href => "#"} Logout Facebook
+    .btn-group
+      %button.btn.btn-primary.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+        Logout
+        %span.caret
+      %ul.dropdown-menu{:role => "menu"}
+        %li
+          %a{:href => "/user/index/logout",:title=>"logout"} Logout
+        %li
+          %a{:href=>"/user/index/close_sesion",:title=>"Close sesion"} Logout Google
     .col-md-6.col-md-offset-3.text-center
       %h1{:style => "margin-top:-5%",:id => "usu"} #{@user}
       %h4 My Short List
@@ -41,6 +37,3 @@
     %label{:for=>"label"}
     %input{:type=>"text",:name=>"label",:id=>"mylabel",:autofocus=>"",:size=>"15"}
     (opcional)
-%br
-/ %form{:name=>"input", :action=>"/user/index/logout",:method=>"get"}
-/   %input{:type=>"button",:value=>"Logout"}
