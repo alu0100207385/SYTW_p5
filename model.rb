@@ -2,46 +2,34 @@ require 'restclient'
 require 'xmlsimple'
 
 
-class ShortenedUrl
+class Shortenedurl
   include DataMapper::Resource
 
    property :id, Serial
    property :email, Text
    property :url, Text
    property :label, Text
+   property :n_visit, Integer, :default => 0
   
-#    has n, :visits
+   has n, :visits
 end
-=begin
+
 class Visit
   include DataMapper::Resource
 
-  property  :id,          Serial
+  property  :id,          Serial, :key => true
   property  :created_at,  DateTime
   property  :ip,          IPAddress
   property  :country,     String
-  belongs_to  :ShortenedUrl
+  
+  belongs_to  :shortenedurl
 
-  after :create, :set_country
+#   after :create, :set_country
 
-  def set_country
-    xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{get_remote_ip}"
+  def get_info
+    xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{self.ip}"
     self.country = XmlSimple.xml_in(xml.to_s)
     self.save
   end
 
-   def get_remote_ip(env)
-	  request.remote_ip
-	  puts "request.url = #{request.url}"
-	  puts "request.ip = #{request.ip}"
-	  if addr = env['HTTP_X_FORWARDED_FOR']
-		 puts "env['HTTP_X_FORWARDED_FOR'] = #{addr}"
-		 addr.split(',').first.strip
-	  else
-		 puts "env['REMOTE_ADDR'] = #{env['REMOTE_ADDR']}"
-		 env['REMOTE_ADDR']
-	  end
-   end
-
 end
-=end

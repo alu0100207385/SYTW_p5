@@ -80,7 +80,7 @@ get '/user/:webname' do
       @user = session[:name]
 # 	  @user_img = session[:image]
 	  email = session[:email]
-	  @list = ShortenedUrl.all(:order => [:id.asc], :email => email)
+	  @list = Shortenedurl.all(:order => [:id.asc], :email => email)
       haml :index
     end
   else
@@ -95,7 +95,7 @@ post '/user/:webname' do
     uri = URI::parse(params[:url])
     if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
       begin
-		 @short_url = ShortenedUrl.first_or_create(:url => params[:url] , :email => session[:email] , :label => params[:label])
+		 @short_url = Shortenedurl.first_or_create(:url => params[:url] , :email => session[:email] , :label => params[:label])
 		 rescue Exception => e
 		 puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
 		 pp @short_url
@@ -113,7 +113,7 @@ end
 get '/user/index/:url' do
    case(params[:url])
    when "logout"
-	  puts "SALIENDO...."
+# 	  puts "SALIENDO...."
 	  if session[:auth]
 		 session[:auth] = nil;
 	  end
@@ -123,62 +123,43 @@ get '/user/index/:url' do
 	  session.clear
 	  redirect 'https://accounts.google.com/Logout'
    when "statistics"
+	  @user = session[:name]
+# 	  @list = Shortenedurl.all(:order => [:id.asc], :email => session[:email])
+	  @list = Shortenedurl.all(:order => [:n_visit.asc], :email => session[:email])
 	  haml :statistics
-   else
+   else #acceder a la url
 	  short_url = nil
-	  short_url = ShortenedUrl.first(:label => params[:url])
+	  short_url = Shortenedurl.first(:label => params[:url])
 	  if short_url == nil
-		 short_url = ShortenedUrl.first(:id => params[:url].to_i(Base))
+		 short_url = Shortenedurl.first(:id => params[:url].to_i(Base))
 	  end
+	  @ip = request.ip
+# 	  short_url = Shortenedurl.first(:n_visit => :n_visit+1)
+	  short_url.n_visit += 1
+	  short_url.save
+	  xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{@ip}"
+# 	  XmlSimple.xml_in(xml.to_s)
+	  @country = XmlSimple.xml_in(xml.to_s,{ 'ForceArray' => false })['featureMember']['Hostip']['countryName']
+	  Visit.first_or_create(:ip => @ip, :created_at => Time.now,:country => @country, :shortenedurl => short_url)
 	  redirect short_url.url, 301
    end
 end
-=begin
-get '/user/index/logout' do
-  puts "SALIENDO...."
-  if session[:auth]
-    session[:auth] = nil;
-  end
-  session.clear
-  redirect '/'
-end
 
-
-get '/user/index/close_sesion' do
-  session.clear
-  redirect 'https://accounts.google.com/Logout'
-end
-
-get '/user/index/statistics' do
-   haml :statistics
-end
-
-
-get '/user/index/:shortened' do
-#    puts "inside get '/user/index/:shortened': #{params}"
-   short_url = nil
-   short_url = ShortenedUrl.first(:label => params[:shortened])
-   if short_url == nil
-	  short_url = ShortenedUrl.first(:id => params[:shortened].to_i(Base))
-   end
-   redirect short_url.url, 301
-end
-=end
 
 delete '/user/index/del/:url' do
 #    puts "#{params[:url]}"
 #    if (params[:url] == 'all')
    case(params[:url])
    when "all"
-	  @short_url = ShortenedUrl.all(:order => [:id.asc], :email => session[:email])
+	  @short_url = Shortenedurl.all(:order => [:id.asc], :email => session[:email])
 	  if (@short_url.length != 0)
 		 @short_url.all.destroy
 	  end
    else
-	  aux = ShortenedUrl.all(:order => [:id.asc], :email => session[:email])
+	  aux = Shortenedurl.all(:order => [:id.asc], :email => session[:email])
 	  if (aux.length != 0) then
 		 begin
-			aux = ShortenedUrl.first(:email => session[:email], :id => params[:url])
+			aux = Shortenedurl.first(:email => session[:email], :id => params[:url])
 			aux.destroy if !aux.nil?
 			rescue Exception => e
 			puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"

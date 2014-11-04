@@ -1,14 +1,14 @@
 .blurb.bright
   .row
     .col-md-6.col-md-offset-3.text-center
-      %h1{:style => "margin-top:-5%",:id => "usu"} #{@user}
+      %h1{:style => "margin-top:-10%",:id => "usu"} #{@user}
       %h4 My Short List
       URLs (label)
       %br
       %br
-      %ol{:id=>"mylinks"}
+      %ol#mylinks
         - if (@list.length == 0)
-          %p{:id=>"empty"} EMPTY LIST
+          %p#empty EMPTY LIST
         - else
           - @list.each do |url|
             %li
@@ -20,10 +20,11 @@
               %form{:name=>"delete",:action=>"/user/index/del/#{url.id.to_s(Base)}",:method=>"post"}
                 %button{:type => "submit",:name=>"_method", :value=>"delete", :id=>"delete"}Borrar
         %br
+        %br
         %div{:style=>"margin-bottom:-13%"}
           %form{:name=>"deleteall",:action=>"/user/index/del/all",:method=>"post"}
             %button{:type => "submit",:name=>"_method", :value=>"delete", :id=>"deleteall"}Borrar Todo
-%div{:style=>"text-align:center"}
+%div.text-center
   Shorten this:
   %form{:name=> "input" , :action=>"/user/index",:method=>"POST"}
     %label{:for=>"url"}
@@ -34,8 +35,12 @@
     %label{:for=>"label"}
     %input{:type=>"text",:name=>"label",:id=>"mylabel",:autofocus=>"",:size=>"15"}
     (opcional)
+    %br
+    %br
+    %br
+    %a.btn.btn-default{:href => "/user/index/statistics", :role => "button",:title=>"Ver estadisticas",:id=>"estadisticas"} Estadísticas
 %br
-%div{:style=>"text-align:right"}
+%div.text-right
   %a.btn.btn-primary{:href=>"/user/index/logout",:title=>"logout",:id=>"out"} Logout
   %br
   %br
