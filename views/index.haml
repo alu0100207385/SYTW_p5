@@ -17,6 +17,7 @@
                 %a{:href=>"/user/index/#{url.id.to_s(Base)}",:title=>"#{url.url}",:id=>"myidgo"} (#{url.id.to_s(Base)})
               - else
                 %a{:href=>"/user/index/#{url.label}",:title=>"#{url.url}",:id=>"mylabelgo"} (#{url.label})
+              %a.btn.btn-default{:href => "/user/index/mystatistics/#{url.id.to_s(Base)}", :role => "button",:title=>"Ver estadisticas",:id=>"estadisticas"} Estadísticas
               %form{:name=>"delete",:action=>"/user/index/del/#{url.id.to_s(Base)}",:method=>"post"}
                 %button{:type => "submit",:name=>"_method", :value=>"delete", :id=>"delete"}Borrar
           %br
@@ -38,8 +39,6 @@
     %br
     %br
     %br
-    %a.btn.btn-default{:href => "/user/index/mystatistics", :role => "button",:title=>"Ver estadisticas",:id=>"estadisticas"} Estadísticas
-%br
 %div.text-right
   %a.btn.btn-primary{:href=>"/user/index/logout",:title=>"logout",:id=>"out"} Logout
   %br

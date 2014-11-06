@@ -118,6 +118,29 @@ get '/statistics/:url' do
    haml :statistics
 end
 
+get '/user/index/mystatistics/:url' do
+	@user = session[:name]
+	@list = Shortenedurl.all(:order => [:url.asc], :email => session[:email])
+	@visits = Visit.all
+	@country = Hash.new
+	@date = Hash.new
+	@url = Shortenedurl.first(:id => params[:url].to_i(Base), :email => session[:email])
+	visit = Visit.all(:shortenedurl => @url)
+	visit.each{ |v|
+	   if (@country[v.country] == nil)
+		  @country[v.country] = 1
+	   else
+		  @country[v.country] += 1
+	   end
+	   if(@date["#{v.created_at.day} - #{v.created_at.month} - #{v.created_at.year}"] == nil)
+		  @date["#{v.created_at.day} - #{v.created_at.month} - #{v.created_at.year}"] = 1
+	   else
+		  @date["#{v.created_at.day} - #{v.created_at.month} - #{v.created_at.year}"] += 1
+	   end
+	}
+	haml :mystatistics
+end
+
 post '/' do
 #   puts "inside post '/': #{params}"
   if (session[:name] == nil)
@@ -170,12 +193,6 @@ get '/user/index/:url' do
    when "close_sesion"
 	  session.clear
 	  redirect 'https://accounts.google.com/Logout'
-   when "mystatistics"
-	  @user = session[:name]
-# 	  @list = Shortenedurl.all(:order => [:id.asc], :email => session[:email])
-	  @list = Shortenedurl.all(:order => [:label.asc], :email => session[:email])
-	  @visits = Visit.all
-	  haml :mystatistics
    else #acceder a la url
 	  @list = nil
 	  @list = Shortenedurl.first(:label => params[:url])
@@ -187,8 +204,8 @@ get '/user/index/:url' do
 # 	  @list.save
 	  xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{@ip}"
 	  @country = XmlSimple.xml_in(xml.to_s,{ 'ForceArray' => false })['featureMember']['Hostip']['countryName']
-	  Visit.first_or_create(:ip => @ip, :created_at => Time.now,:country => @country, :shortenedurl => short_url)
-	  redirect short_url.url, 301
+	  Visit.first_or_create(:ip => @ip, :created_at => Time.now,:country => @country, :shortenedurl => @list)
+	  redirect @list.url, 301
    end
 end
 
