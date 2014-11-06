@@ -1,4 +1,5 @@
-%h1.text-center Estadisticas
+%h1.text-center #{@user}
+%h2.text-center Estadisticas
 %br
 %ol#mylinks.text-center
   - if (@list!=nil)
@@ -14,4 +15,4 @@
       = geo_chart @country
 %br
 %div.text-center
-  %a.btn.btn-info{:href => "/", :role => "button"} Volver
+  %a.btn.btn-info{:href => "/user/index", :role => "button"} Volver

@@ -1,5 +1,14 @@
 .blurb.bright
   .row
+    .btn-group
+      %button.btn.btn-primary.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+        Logout
+        %span.caret
+      %ul.dropdown-menu{:role => "menu"}
+        %li
+          %a{:href => "/user/index/logout",:title=>"logout"} Logout
+        %li
+          %a{:href=>"/user/index/close_sesion",:title=>"Close sesion"} Logout Google
     .col-md-6.col-md-offset-3.text-center
       %h1{:style => "margin-top:-10%",:id => "usu"} #{@user}
       %h4 My Short List
@@ -36,11 +45,3 @@
     %label{:for=>"label"}
     %input{:type=>"text",:name=>"label",:id=>"mylabel",:autofocus=>"",:size=>"15"}
     (opcional)
-    %br
-    %br
-    %br
-%div.text-right
-  %a.btn.btn-primary{:href=>"/user/index/logout",:title=>"logout",:id=>"out"} Logout
-  %br
-  %br
-  %a.btn.btn-primary{:href=>"/user/index/close_sesion",:title=>"Close sesion",:id=>"close"} Close Google Session
