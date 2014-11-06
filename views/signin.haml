@@ -1,6 +1,37 @@
-.header.alt.vert
+.header.alt.vert{:style=>"margin-bottom:-15%"}
   .container
-    %h1 SYTW
+    %h1{:style=>"margin-top:-1%"} SYTW
     %p.lead Práctica 5: Estadisticas de urls cortas
     %div &nbsp;
     %a.btn.btn-default.btn-lg{:href => "/auth/google_oauth2",:id => "enter"}Sign in with Google
+    %br
+    %br
+#sec1.blurb
+  .container
+    .row.text-center{:style=>"margin-top:-10%"}
+      %h4 Short List's Invited
+      %ol#mylinks
+        - if (@list.length == 0)
+          %p#empty EMPTY LIST
+        - else
+          - @list.each do |url|
+            %li
+              #{url.url}
+              - if (url.label == '')
+                %a{:href=>"/#{url.id.to_s(Base)}",:title=>"#{url.url}",:id=>"myidgo"} (#{url.id.to_s(Base)})
+              - else
+                %a{:href=>"/#{url.label}",:title=>"#{url.url}",:id=>"mylabelgo"} (#{url.label})
+              %a.btn.btn-default{:href => "/statistics/#{url.id.to_s(Base)}", :role => "button",:title=>"Ver estadisticas",:id=>"estadisticas"} Estadísticas
+              %form{:name=>"delete",:action=>"/del/#{url.id.to_s(Base)}",:method=>"post"}
+                %button{:type => "submit",:name=>"_method", :value=>"delete", :id=>"delete"}Borrar
+      %div.text-center
+        Shorten this:
+        %form{:name=> "input" , :action=>"/",:method=>"POST"}
+          %label{:for=>"url"}
+          %input{:type=>"text",:name=>"url",:id=>"myurl",:autofocus => "",:size=>"50"}
+          %input.btn.btn-default{:type=>"submit",:value=>"Make it",:id=>"makeit"}
+          %br
+          to &#47;
+          %label{:for=>"label"}
+          %input{:type=>"text",:name=>"label",:id=>"mylabel",:autofocus=>"",:size=>"15"}
+          (opcional)

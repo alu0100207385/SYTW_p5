@@ -53,6 +53,10 @@ Las opciones posibles son:
 * [Travis](https://travis-ci.org/)
 * [Ejemplo practico Selenium](http://aspyct.org/blog/2012/09/09/functional-web-testing-with-selenium-and-ruby/)
 * [Google EN](http://www.google.com/webhp?hl=en)
+* [Sinatra request](http://www.sinatrarb.com/intro.html#Accessing%20the%20Request%20Object)
+* [Chartkick example] (https://github.com/crguezl/sinatra-chartkick-example)
+* [Chartkick](http://ankane.github.io/chartkick/)
+* [List of the strategies](https://github.com/intridea/omniauth/wiki/List-of-Strategies)
 
 -------------------------
 *Aarón Socas Gaspar && Aarón José Vera Cerdeña- Sistemas y Tecnologías Web (Curso 2014-2015)*

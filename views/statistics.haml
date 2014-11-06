@@ -1,0 +1,17 @@
+%h1.text-center Estadisticas
+%br
+%ol#mylinks.text-center
+  - if (@list!=nil)
+    - if (@list.length == 0)
+      %p#empty EMPTY LIST
+    - else
+      %h2 #{@url.url}
+      %h4 Visitas por día
+      = column_chart @date
+      = bar_chart @date
+      %h4 Visitas por país
+      = pie_chart @country
+      = geo_chart @country
+%br
+%div.text-center
+  %a.btn.btn-info{:href => "/", :role => "button"} Volver
