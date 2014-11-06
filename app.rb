@@ -46,15 +46,6 @@ enable :sessions
 set :session_secret, '*&(^#234a)'
 
 get '/' do
-=begin
-   puts "remote IP = #{request.ip}"
-   puts "request.url = #{request.url}"
-  def set_country
-    xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{request.ip}"
-	XmlSimple.xml_in(xml.to_s)
-  end
-  puts "** #{set_country}"
-=end
    @list = Shortenedurl.all(:order => [:id.asc], :email => nil)
    haml :signin
 end
@@ -89,31 +80,42 @@ get '/user/:webname' do
   end
 end
 
-
 get '/:url' do
-   case(params[:url])
-   when "statistics"
-# 	  @user = session[:name]
-# 	  @list = Shortenedurl.all(:order => [:id.asc], :email => session[:email])
-# 	  @list = Shortenedurl.all(:order => [:n_visit.asc], :email => session[:email])
-# 	  @visits = Visit.all
-	  haml :statistics
-   else #acceder a la url
-	  short_url = nil
-	  short_url = Shortenedurl.first(:label => params[:url])
-	  if short_url == nil
-		 short_url = Shortenedurl.first(:id => params[:url].to_i(Base))
-	  end
-	  @ip = request.ip
-# 	  short_url = Shortenedurl.first(:n_visit => :n_visit+1)
-	  short_url.n_visit += 1
-	  short_url.save
-	  xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{@ip}"
-# 	  XmlSimple.xml_in(xml.to_s)
-	  @country = XmlSimple.xml_in(xml.to_s,{ 'ForceArray' => false })['featureMember']['Hostip']['countryName']
-	  Visit.first_or_create(:ip => @ip, :created_at => Time.now,:country => @country, :shortenedurl => short_url)
-	  redirect short_url.url, 301
+   short_url = nil
+   short_url = Shortenedurl.first(:label => params[:url])
+   if short_url == nil
+	  short_url = Shortenedurl.first(:id => params[:url].to_i(Base))
    end
+   @ip = request.ip
+   xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{@ip}"
+   @country = XmlSimple.xml_in(xml.to_s,{ 'ForceArray' => false })['featureMember']['Hostip']['countryName']
+   Visit.first_or_create(:ip => @ip, :created_at => Time.now,:country => @country, :shortenedurl => short_url)
+   redirect short_url.url, 301
+end
+
+
+get '/statistics/:url' do
+   @list = Shortenedurl.all(:order => [:url.asc], :email => nil)
+   @country = Hash.new
+   @date = Hash.new
+
+   @url = Shortenedurl.first(:id => params[:url].to_i(Base))
+   visit = Visit.all(:shortenedurl => @url)
+   visit.each{ |v|
+# 	    id = v.shortenedurl_id
+   if (@country[v.country] == nil)
+	  @country[v.country] = 1
+   else
+	  @country[v.country] += 1
+   end
+
+   if(@date["#{v.created_at.day} - #{v.created_at.month} - #{v.created_at.year}"] == nil)
+	  @date["#{v.created_at.day} - #{v.created_at.month} - #{v.created_at.year}"] = 1
+   else
+	  @date["#{v.created_at.day} - #{v.created_at.month} - #{v.created_at.year}"] += 1
+   end
+   }
+   haml :statistics
 end
 
 post '/' do
@@ -168,24 +170,22 @@ get '/user/index/:url' do
    when "close_sesion"
 	  session.clear
 	  redirect 'https://accounts.google.com/Logout'
-   when "statistics"
+   when "mystatistics"
 	  @user = session[:name]
 # 	  @list = Shortenedurl.all(:order => [:id.asc], :email => session[:email])
-	  @list = Shortenedurl.all(:order => [:n_visit.asc], :email => session[:email])
+	  @list = Shortenedurl.all(:order => [:label.asc], :email => session[:email])
 	  @visits = Visit.all
-	  haml :statistics
+	  haml :mystatistics
    else #acceder a la url
-	  short_url = nil
-	  short_url = Shortenedurl.first(:label => params[:url])
-	  if short_url == nil
-		 short_url = Shortenedurl.first(:id => params[:url].to_i(Base))
+	  @list = nil
+	  @list = Shortenedurl.first(:label => params[:url])
+	  if @list == nil
+		 @list = Shortenedurl.first(:id => params[:url].to_i(Base))
 	  end
 	  @ip = request.ip
-# 	  short_url = Shortenedurl.first(:n_visit => :n_visit+1)
-	  short_url.n_visit += 1
-	  short_url.save
+# 	  @list.n_visit += 1
+# 	  @list.save
 	  xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{@ip}"
-# 	  XmlSimple.xml_in(xml.to_s)
 	  @country = XmlSimple.xml_in(xml.to_s,{ 'ForceArray' => false })['featureMember']['Hostip']['countryName']
 	  Visit.first_or_create(:ip => @ip, :created_at => Time.now,:country => @country, :shortenedurl => short_url)
 	  redirect short_url.url, 301

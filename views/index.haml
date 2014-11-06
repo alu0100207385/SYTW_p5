@@ -19,11 +19,11 @@
                 %a{:href=>"/user/index/#{url.label}",:title=>"#{url.url}",:id=>"mylabelgo"} (#{url.label})
               %form{:name=>"delete",:action=>"/user/index/del/#{url.id.to_s(Base)}",:method=>"post"}
                 %button{:type => "submit",:name=>"_method", :value=>"delete", :id=>"delete"}Borrar
-        %br
-        %br
-        %div{:style=>"margin-bottom:-13%"}
-          %form{:name=>"deleteall",:action=>"/user/index/del/all",:method=>"post"}
-            %button{:type => "submit",:name=>"_method", :value=>"delete", :id=>"deleteall"}Borrar Todo
+          %br
+          %br
+          %div{:style=>"margin-bottom:-13%"}
+            %form{:name=>"deleteall",:action=>"/user/index/del/all",:method=>"post"}
+              %button{:type => "submit",:name=>"_method", :value=>"delete", :id=>"deleteall"}Borrar Todo
 %div.text-center
   Shorten this:
   %form{:name=> "input" , :action=>"/user/index",:method=>"POST"}
@@ -38,7 +38,7 @@
     %br
     %br
     %br
-    %a.btn.btn-default{:href => "/user/index/statistics", :role => "button",:title=>"Ver estadisticas",:id=>"estadisticas"} Estadísticas
+    %a.btn.btn-default{:href => "/user/index/mystatistics", :role => "button",:title=>"Ver estadisticas",:id=>"estadisticas"} Estadísticas
 %br
 %div.text-right
   %a.btn.btn-primary{:href=>"/user/index/logout",:title=>"logout",:id=>"out"} Logout

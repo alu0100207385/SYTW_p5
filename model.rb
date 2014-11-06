@@ -9,7 +9,7 @@ class Shortenedurl
    property :email, Text
    property :url, Text
    property :label, Text
-   property :n_visit, Integer, :default => 0
+#    property :n_visit, Integer, :default => 0
   
    has n, :visits
 end
@@ -22,14 +22,5 @@ class Visit
   property  :ip,          IPAddress
   property  :country,     String
   
-  belongs_to  :shortenedurl
-
-#   after :create, :set_country
-
-  def get_info
-    xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{self.ip}"
-    self.country = XmlSimple.xml_in(xml.to_s)
-    self.save
-  end
-
+  belongs_to :shortenedurl
 end
