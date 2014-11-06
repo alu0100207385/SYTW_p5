@@ -13,6 +13,7 @@ require 'data_mapper'
 require 'erubis'
 require 'pp'
 require 'chartkick'
+require 'omniauth-facebook'
 
 # set :erb, :escape_html => true
 set :environment, :development
@@ -23,6 +24,7 @@ Base = 36
 use OmniAuth::Builder do
   config = YAML.load_file 'config/config.yml'
   provider :google_oauth2, config['identifier'], config['secret']
+  provider :facebook, config['fidentifier'], config['fsecret']
 end
 
 # Creamos la bd
@@ -46,7 +48,7 @@ enable :sessions
 set :session_secret, '*&(^#234a)'
 
 get '/' do
-   @list = Shortenedurl.all(:order => [:id.asc], :email => nil)
+   @list = Shortenedurl.all(:order => [:id.asc], :email => nil,:nickname => nil)
    haml :signin
 end
 
@@ -55,10 +57,16 @@ get '/auth/:name/callback' do
     config = YAML.load_file 'config/config.yml'
     case params[:name]
     when 'google_oauth2'
-    @auth = request.env['omniauth.auth']
+      @auth = request.env['omniauth.auth']
       session[:name] = @auth['info'].name
-    session[:email] = @auth['info'].email
+      session[:email] = @auth['info'].email
 #     session[:image] = @auth['info'].image
+      redirect "user/index"
+
+    when 'facebook'
+      @auth = request.env['omniauth.auth']
+      session[:name] = @auth['info'].name
+      session[:nickname] = @auth['info'].nickname
       redirect "user/index"
     else
       redirect "/auth/failure"
@@ -71,10 +79,19 @@ get '/user/:webname' do
     when "index"
       @user = session[:name]
 #     @user_img = session[:image]
-    email = session[:email]
-    @list = Shortenedurl.all(:order => [:id.asc], :email => email)
+      email = session[:email]
+      @list = Shortenedurl.all(:order => [:id.asc], :email => email)
       haml :index
     end
+  elsif (session[:nickname] != nil)
+    case(params[:webname])
+    when "index"
+      @user = session[:name]
+#     @user_img = session[:image]
+      nickname  = session[:nickname]
+      @list = Shortenedurl.all(:order => [:id.asc], :nickname => nickname)
+      haml :index
+  end 
   else
     redirect '/'
   end
@@ -100,7 +117,7 @@ end
 
 
 get '/statistics/:url' do
-   @list = Shortenedurl.all(:order => [:url.asc], :email => nil)
+   @list = Shortenedurl.all(:order => [:url.asc], :email => nil,:nickname =>nil)
    @country = Hash.new
    @date = Hash.new
 
@@ -125,11 +142,16 @@ end
 
 get '/user/index/mystatistics/:url' do
   @user = session[:name]
-  @list = Shortenedurl.all(:order => [:url.asc], :email => session[:email])
+  if(session[:nickname]==nil)
+    @list = Shortenedurl.all(:order => [:url.asc], :email => session[:email])
+    @url = Shortenedurl.first(:id => params[:url].to_i(Base), :email => session[:email])
+  else
+    @list = Shortenedurl.all(:order => [:url.asc], :nickname => session[:nickname])
+    @url = Shortenedurl.first(:id => params[:url].to_i(Base), :nickname => session[:nickname])
+  end
   @visits = Visit.all
   @country = Hash.new
   @date = Hash.new
-  @url = Shortenedurl.first(:id => params[:url].to_i(Base), :email => session[:email])
   visit = Visit.all(:shortenedurl => @url)
   visit.each{ |v|
      if (@country[v.country] == nil)

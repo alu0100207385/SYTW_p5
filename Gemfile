@@ -13,6 +13,7 @@ gem 'thin'
 gem 'rest-client'
 gem 'xml-simple'
 gem 'chartkick'
+gem 'omniauth-facebook'
 
 group :production do
    gem 'do_postgres'
