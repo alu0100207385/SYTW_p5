@@ -55,6 +55,7 @@ get '/' do
   end
   puts "** #{set_country}"
 =end
+   @list = Shortenedurl.all(:order => [:id.asc], :email => nil)
    haml :signin
 end
 
@@ -88,6 +89,51 @@ get '/user/:webname' do
   end
 end
 
+
+get '/:url' do
+   case(params[:url])
+   when "statistics"
+# 	  @user = session[:name]
+# 	  @list = Shortenedurl.all(:order => [:id.asc], :email => session[:email])
+# 	  @list = Shortenedurl.all(:order => [:n_visit.asc], :email => session[:email])
+# 	  @visits = Visit.all
+	  haml :statistics
+   else #acceder a la url
+	  short_url = nil
+	  short_url = Shortenedurl.first(:label => params[:url])
+	  if short_url == nil
+		 short_url = Shortenedurl.first(:id => params[:url].to_i(Base))
+	  end
+	  @ip = request.ip
+# 	  short_url = Shortenedurl.first(:n_visit => :n_visit+1)
+	  short_url.n_visit += 1
+	  short_url.save
+	  xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{@ip}"
+# 	  XmlSimple.xml_in(xml.to_s)
+	  @country = XmlSimple.xml_in(xml.to_s,{ 'ForceArray' => false })['featureMember']['Hostip']['countryName']
+	  Visit.first_or_create(:ip => @ip, :created_at => Time.now,:country => @country, :shortenedurl => short_url)
+	  redirect short_url.url, 301
+   end
+end
+
+post '/' do
+#   puts "inside post '/': #{params}"
+  if (session[:name] == nil)
+    uri = URI::parse(params[:url])
+    if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
+      begin
+		 @short_url = Shortenedurl.first_or_create(:url => params[:url] , :email => nil , :label => params[:label])
+		 rescue Exception => e
+		 puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
+		 pp @short_url
+		 puts e.message
+      end
+    else
+      logger.info "Error! <#{params[:url]}> is not a valid URL"
+    end
+  end
+  redirect '/'
+end
 
 post '/user/:webname' do
 #   puts "inside post '/': #{params}"
@@ -126,6 +172,7 @@ get '/user/index/:url' do
 	  @user = session[:name]
 # 	  @list = Shortenedurl.all(:order => [:id.asc], :email => session[:email])
 	  @list = Shortenedurl.all(:order => [:n_visit.asc], :email => session[:email])
+	  @visits = Visit.all
 	  haml :statistics
    else #acceder a la url
 	  short_url = nil
@@ -145,6 +192,21 @@ get '/user/index/:url' do
    end
 end
 
+
+delete '/del/:url' do
+   aux = Shortenedurl.all(:order => [:id.asc], :email => nil)
+   if (aux.length != 0) then
+	  begin
+		 aux = Shortenedurl.first(:id => params[:url])
+		 aux.destroy if !aux.nil?
+		 rescue Exception => e
+		 puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
+		 pp @short_url
+		 puts e.message
+	  end
+   end
+   redirect '/'
+end
 
 delete '/user/index/del/:url' do
 #    puts "#{params[:url]}"

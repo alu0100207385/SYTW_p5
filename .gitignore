@@ -2,3 +2,4 @@
 .DS_Store
 *.db
 config_reservas.yml
+tmp.*

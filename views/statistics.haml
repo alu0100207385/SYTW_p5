@@ -1,0 +1,19 @@
+%h1.text-center #{@user}
+%h2.text-center Estadisticas
+%br
+%ol#mylinks.text-center
+  - if (@list.length == 0)
+    %p{:id=>"empty"} EMPTY LIST
+  - else
+    - @list.each do |url|
+      %li
+        #{url.url}
+        %h3 Visitas por dia
+        dsfdf
+        %h3 Ejemplo
+        =pie_chart({"Football" => 10, "Basketball" => 5})
+%br
+%div.text-center
+  %a.btn.btn-info{:href => "/user/index", :role => "button"} Volver
+/         = pie_chart @visits.group(:country)
+/         = line_chart @visits.group_by_day(:created_at, format: "%B %d, %Y").count, discrete: true
