@@ -79,7 +79,11 @@ get '/user/:webname' do
     redirect '/'
   end
 end
-
+=begin
+get '/help' do
+   haml :help
+end
+=end
 get '/:url' do
    short_url = nil
    short_url = Shortenedurl.first(:label => params[:url])
