@@ -46,18 +46,18 @@ enable :sessions
 set :session_secret, '*&(^#234a)'
 
 get '/' do
-   @list = Shortenedurl.all(:order => [:id.asc], :email => nil)
+   @list = ShortenedUrl.all(:order => [:id.asc], :email => nil)
    haml :signin
 end
 
 
 get '/auth/:name/callback' do
-    config = YAML.load_file 'config/config.yml'
+    config = YAML.load_file 'config/confg.yml'
     case params[:name]
     when 'google_oauth2'
     @auth = request.env['omniauth.auth']
       session[:name] = @auth['info'].name
-    session[:email] = @auth['info'].email
+    session[:nickname] = @auth['info'].nickname
 #     session[:image] = @auth['info'].image
       redirect "user/index"
     else
@@ -72,7 +72,7 @@ get '/user/:webname' do
       @user = session[:name]
 #     @user_img = session[:image]
     email = session[:email]
-    @list = Shortenedurl.all(:order => [:id.asc], :email => email)
+    @list = ShortenedUrl.all(:order => [:id.asc], :email => email)
       haml :index
     end
   else
@@ -88,9 +88,9 @@ end
 
 get '/:url' do
    short_url = nil
-   short_url = Shortenedurl.first(:label => params[:url])
+   short_url = ShortenedUrl.first(:label => params[:url])
    if short_url == nil
-    short_url = Shortenedurl.first(:id => params[:url].to_i(Base))
+    short_url = ShortenedUrl.first(:id => params[:url].to_i(Base))
    end
    @ip = request.ip
    xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{@ip}"
@@ -102,11 +102,11 @@ end
 
 
 get '/statistics/:url' do
-   @list = Shortenedurl.all(:order => [:url.asc], :email => nil)
+   @list = ShortenedUrl.all(:order => [:url.asc], :email => nil)
    @country = Hash.new
    @date = Hash.new
 
-   @url = Shortenedurl.first(:id => params[:url].to_i(Base))
+   @url = ShortenedUrl.first(:id => params[:url].to_i(Base))
    visit = Visit.all(:shortenedurl => @url)
    visit.each{ |v|
 #       id = v.shortenedurl_id
@@ -127,11 +127,11 @@ end
 
 get '/user/index/mystatistics/:url' do
   @user = session[:name]
-  @list = Shortenedurl.all(:order => [:url.asc], :email => session[:email])
+  @list = ShortenedUrl.all(:order => [:url.asc], :email => session[:email])
   @visits = Visit.all
   @country = Hash.new
   @date = Hash.new
-  @url = Shortenedurl.first(:id => params[:url].to_i(Base), :email => session[:email])
+  @url = ShortenedUrl.first(:id => params[:url].to_i(Base), :email => session[:email])
   visit = Visit.all(:shortenedurl => @url)
   visit.each{ |v|
      if (@country[v.country] == nil)
@@ -154,7 +154,7 @@ post '/' do
     uri = URI::parse(params[:url])
     if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
       begin
-     @short_url = Shortenedurl.first_or_create(:url => params[:url] , :email => nil , :label => params[:label])
+     @short_url = ShortenedUrl.first_or_create(:url => params[:url] , :email => nil , :label => params[:label])
      rescue Exception => e
      puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
      pp @short_url
@@ -173,7 +173,7 @@ post '/user/:webname' do
     uri = URI::parse(params[:url])
     if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
       begin
-     @short_url = Shortenedurl.first_or_create(:url => params[:url] , :email => session[:email] , :label => params[:label])
+     @short_url = ShortenedUrl.first_or_create(:url => params[:url] , :email => session[:email] , :label => params[:label])
      rescue Exception => e
      puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
      pp @short_url
@@ -202,9 +202,9 @@ get '/user/index/:url' do
     redirect 'https://accounts.google.com/Logout'
    else #acceder a la url
     @list = nil
-    @list = Shortenedurl.first(:label => params[:url])
+    @list = ShortenedUrl.first(:label => params[:url])
     if @list == nil
-     @list = Shortenedurl.first(:id => params[:url].to_i(Base))
+     @list = ShortenedUrl.first(:id => params[:url].to_i(Base))
     end
     @ip = request.ip
 #     @list.n_visit += 1
@@ -218,10 +218,10 @@ end
 
 
 delete '/del/:url' do
-   aux = Shortenedurl.all(:order => [:id.asc], :email => nil)
+   aux = ShortenedUrl.all(:order => [:id.asc], :email => nil)
    if (aux.length != 0) then
     begin
-     aux = Shortenedurl.first(:id => params[:url])
+     aux = ShortenedUrl.first(:id => params[:url])
      aux.destroy if !aux.nil?
      rescue Exception => e
      puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
@@ -237,15 +237,15 @@ delete '/user/index/del/:url' do
 #    if (params[:url] == 'all')
    case(params[:url])
    when "all"
-    @short_url = Shortenedurl.all(:order => [:id.asc], :email => session[:email])
+    @short_url = ShortenedUrl.all(:order => [:id.asc], :email => session[:email])
     if (@short_url.length != 0)
      @short_url.all.destroy
     end
    else
-    aux = Shortenedurl.all(:order => [:id.asc], :email => session[:email])
+    aux = ShortenedUrl.all(:order => [:id.asc], :email => session[:email])
     if (aux.length != 0) then
      begin
-      aux = Shortenedurl.first(:email => session[:email], :id => params[:url])
+      aux = ShortenedUrl.first(:email => session[:email], :id => params[:url])
       aux.destroy if !aux.nil?
       rescue Exception => e
       puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"

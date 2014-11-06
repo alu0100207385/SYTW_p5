@@ -2,7 +2,7 @@ require 'restclient'
 require 'xmlsimple'
 
 
-class Shortenedurl
+class ShortenedUrl
   include DataMapper::Resource
 
    property :id, Serial
