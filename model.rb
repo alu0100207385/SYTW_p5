@@ -9,6 +9,7 @@ class Shortenedurl
    property :email, Text
    property :url, Text
    property :label, Text
+   property :nickname, Text 
 #    property :n_visit, Integer, :default => 0
   
    has n, :visits
