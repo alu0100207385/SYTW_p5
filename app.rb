@@ -66,7 +66,9 @@ get '/auth/:name/callback' do
     when 'facebook'
       @auth = request.env['omniauth.auth']
       session[:name] = @auth['info'].name
+      puts "#{session[:name]}"
       session[:nickname] = @auth['info'].nickname
+      puts "#{session[:nickname]}"
       redirect "user/index"
     else
       redirect "/auth/failure"
@@ -174,7 +176,7 @@ post '/' do
     uri = URI::parse(params[:url])
     if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
       begin
-     @short_url = Shortenedurl.first_or_create(:url => params[:url] , :email => nil , :label => params[:label])
+     @short_url = Shortenedurl.first_or_create(:url => params[:url] , :email => nil , :label => params[:label],:nickname => session[:nickname])
      rescue Exception => e
      puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
      pp @short_url
@@ -203,6 +205,20 @@ post '/user/:webname' do
       logger.info "Error! <#{params[:url]}> is not a valid URL"
     end
     redirect '/user/index'
+  elsif (session[:nickname] !=nil)
+    uri = URI::parse(params[:url])
+    if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
+      begin
+       @short_url = Shortenedurl.first_or_create(:url => params[:url] , :nickname => session[:nickname] , :label => params[:label])
+       rescue Exception => e
+       puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
+       pp @short_url
+       puts e.message
+      end
+    else
+      logger.info "Error! <#{params[:url]}> is not a valid URL"
+    end
+    redirect '/user/index'
   end
   redirect '/'
 end
@@ -213,14 +229,14 @@ get '/user/index/:url' do
    when "logout"
 #     puts "SALIENDO...."
     if session[:auth]
-     session[:auth] = nil;
+       session[:auth] = nil;
     end
     session.clear
     redirect '/'
    when "close_sesion"
     session.clear
-    redirect 'https://accounts.google.com/Logout'
-   else #acceder a la url
+    redirect '/'
+  else #acceder a la url
     @list = nil
     @list = Shortenedurl.first(:label => params[:url])
     if @list == nil
@@ -236,9 +252,8 @@ get '/user/index/:url' do
    end
 end
 
-
 delete '/del/:url' do
-   aux = Shortenedurl.all(:order => [:id.asc], :email => nil)
+   aux = Shortenedurl.all(:order => [:id.asc], :email => nil,:nickname => nil)
    if (aux.length != 0) then
     begin
      aux = Shortenedurl.first(:id => params[:url])
